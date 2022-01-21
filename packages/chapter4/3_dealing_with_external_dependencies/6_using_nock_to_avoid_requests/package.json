@@ -1,5 +1,5 @@
 {
-  "name": "4_integrations_with_other_apis1",
+  "name": "4.3.6_integrations_with_other_apis_with_nock",
   "version": "1.0.0",
   "scripts": {
     "test": "jest --runInBand"

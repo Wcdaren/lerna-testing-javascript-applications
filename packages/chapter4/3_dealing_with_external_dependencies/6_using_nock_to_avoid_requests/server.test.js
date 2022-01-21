@@ -166,10 +166,14 @@ describe("fetch inventory items", () => {
     eggs.id = eggsId;
   });
 
+  // Ensures that no mocks will persist from one test to another
   beforeEach(() => {
     nock.cleanAll();
   });
 
+  // Before each test, if not all interceptors have been reached,
+  // removes all interceptors and throws an error.
+  // Clearingunused interceptors will prevent further tests from failing due to old interceptors being triggered
   afterEach(() => {
     if (!nock.isDone()) {
       throw new Error("Not all mocked endpoints received requests.");
@@ -182,17 +186,21 @@ describe("fetch inventory items", () => {
       href: "example.org",
       results: [{ name: "Omelette du Fromage" }]
     };
-
+    // Causes requests sent to the Recipe Puppy API’s /api endpoint to resolve with the static object defined earlier inthe test.
+    // This interceptor will be triggered only when the query string’s i property’s value is eggs.
     nock("http://recipepuppy.com")
       .get("/api")
       .query({ i: "eggs" })
       .reply(200, eggsResponse);
 
+    //  Sends a GET request to your own server’s /inventory/eggs route, and expects it to succeed
     const response = await request(app)
       .get(`/inventory/eggs`)
       .expect(200)
       .expect("Content-Type", /json/);
 
+    // Checks your server’s response.
+    // This assertion expects the response to include the item’s information found in thedatabase and uses the static data with which the nock interceptor responds.
     expect(response.body).toEqual({
       ...eggs,
       info: `Data obtained from ${eggsResponse.title} - ${eggsResponse.href}`,
