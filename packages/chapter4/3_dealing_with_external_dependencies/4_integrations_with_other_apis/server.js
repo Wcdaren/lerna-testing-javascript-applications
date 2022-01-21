@@ -114,6 +114,7 @@ router.delete("/carts/:username/items/:item", async ctx => {
     .where({ userId: user.id });
 });
 
+//  Responds to GET requests sent to /inventory/:itemName with the item’s information found in the inventory table
 router.get("/inventory/:itemName", async ctx => {
   const { itemName } = ctx.params;
 

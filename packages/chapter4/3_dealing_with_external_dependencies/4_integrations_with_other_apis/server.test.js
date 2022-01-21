@@ -155,7 +155,7 @@ describe("create accounts", () => {
 describe("fetch inventory items", () => {
   const eggs = { itemName: "eggs", quantity: 3 };
   const applePie = { itemName: "apple pie", quantity: 1 };
-
+  // Inserts three eggs and an apple pie in the inventory
   beforeEach(async () => {
     await db("inventory").insert([eggs, applePie]);
     const { id: eggsId } = await db
@@ -165,7 +165,7 @@ describe("fetch inventory items", () => {
       .first();
     eggs.id = eggsId;
   });
-
+  // Sends a GET request to /inventory/eggs, and expects the response’s body to include the item’s ID, name, andthe quantity available
   test("can fetch an item from the inventory", async () => {
     const thirdPartyResponse = await fetch("http://recipepuppy.com/api?i=eggs");
     const { title, href, results: recipes } = await thirdPartyResponse.json();

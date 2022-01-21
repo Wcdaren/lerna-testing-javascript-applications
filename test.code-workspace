@@ -1,0 +1,27 @@
+{
+  "folders": [
+    {
+      "name": "✨ testing-javascript-applications",
+      "path": "."
+    },
+    {
+      "name": "📦 3_jest_multiple_tests",
+      "path": "packages/chapter2/2_unit_tests/3_jest_multiple_tests"
+    },
+    {
+      "name": "📦 4_jest_assertions",
+      "path": "packages/chapter2/2_unit_tests/4_jest_assertions"
+    },
+    {
+      "name": "📦 5_global_jest",
+      "path": "packages/chapter2/2_unit_tests/5_npm_scripts"
+    },
+    {
+      "name": "🚀 4_integrations_with_other_apis",
+      "path": "packages/chapter4/3_dealing_with_external_dependencies/4_integrations_with_other_apis"
+    }
+],
+"settings": {
+	"workspace.isHidden": true
+}
+}
