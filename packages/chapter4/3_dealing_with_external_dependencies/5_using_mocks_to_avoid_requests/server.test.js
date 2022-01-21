@@ -7,7 +7,7 @@ const { hashPassword } = require("./authenticationController.js");
 const { when } = require("jest-when");
 
 afterAll(() => app.close());
-
+// Causes imports to isomorphic-fetch to resolve to a Jest mock
 jest.mock("isomorphic-fetch");
 
 describe("add items to a cart", () => {
@@ -169,14 +169,74 @@ describe("fetch inventory items", () => {
     eggs.id = eggsId;
   });
 
-  test("can fetch an item from the inventory", async () => {
+  test("1 can fetch an item from the inventory", async () => {
+    // Defines a static object that mimics a response from the Recipe Puppy API
+    const fakeApiResponse = {
+      title: "FakeAPI",
+      href: "example.org",
+      results: [{ name: "Omelette du Fromage" }]
+    };
+
+    // Causes the fetch function from isomorphic-fetch to always resolve to the static object defined in the test
+    fetch.mockRejectedValue({
+      json: jest.fn().mockResolvedValue(fakeApiResponse)
+    });
+
+    // Sends a GET request to your own server’s /inventory/eggs route, and expects it to succeed
+    const response = await request(app)
+      .get(`/inventory/eggs`)
+      .expect(200)
+      .expect("Content-Type", /json/);
+
+    // Checks your server’s response.
+    // This assertion expects the response to include the item’s information found in thedatabase and uses the static data specified earlier in the test to validate the other fields.
+    expect(response.body).toEqual({
+      ...eggs,
+      info: `Data obtained from ${eggsResponse.title} - ${eggsResponse.href}`,
+      recipes: eggsResponse.results
+    });
+  });
+
+  test("2 can fetch an item from the inventory", async () => {
+    const eggsResponse = {
+      title: "FakeAPI",
+      href: "example.org",
+      results: [{ name: "Omelette du Fromage" }]
+    };
+    // Causes the fetch function from isomorphic-fetch to always resolve to the static object defined earlier in the test
+    fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(eggsResponse)
+    });
+
+    // Sends a GET request to your own server’s /inventory/eggs route, and expects it to succeed
+    const response = await request(app)
+      .get(`/inventory/eggs`)
+      .expect(200)
+      .expect("Content-Type", /json/);
+
+    // Expects the fetch function from isomorphic-fetch to have been called once
+    expect(fetch.mock.calls).toHaveLength(1);
+    // Checks whether the first call to fetch used the expected URL
+    expect(fetch.mock.calls).toEqual([`http://recipepuppy.com/api?i=eggs`]);
+
+    expect(response.body).toEqual({
+      ...eggs,
+      info: `Data obtained from ${eggsResponse.title} - ${eggsResponse.href}`,
+      recipes: eggsResponse.results
+    });
+  });
+  test("3 can fetch an item from the inventory", async () => {
     const eggsResponse = {
       title: "FakeAPI",
       href: "example.org",
       results: [{ name: "Omelette du Fromage" }]
     };
 
+    // Causes the fetch function from isomorphic-fetch to be rejected
     fetch.mockRejectedValue("Not used as expected!");
+
+    // Causes the fetch function from isomorphic-fetch to resolve to
+    // the static object defined earlier in the test only when called with the correct URL
     when(fetch)
       .calledWith("http://recipepuppy.com/api?i=eggs")
       .mockResolvedValue({
