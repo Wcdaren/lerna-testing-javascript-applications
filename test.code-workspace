@@ -5,6 +5,18 @@
       "path": "."
     },
     {
+      "name": "7.1 1_createelement_calls",
+      "path": "packages/chapter7/1_setting_up_a_test_environment/1_createElement_calls"
+    },
+    {
+      "name": "7.2 1_react_testing_utilities",
+      "path": "packages/chapter7/2_an_overview_of_react_testing_libraries/1_react_testing_utilities/"
+    },
+    {
+      "name": "7.2 2_react_testing_library",
+      "path": "packages/chapter7/2_an_overview_of_react_testing_libraries/2_react_testing_library/"
+    },
+    {
       "name": "📦 3_jest_multiple_tests",
       "path": "packages/chapter2/2_unit_tests/3_jest_multiple_tests"
     },
